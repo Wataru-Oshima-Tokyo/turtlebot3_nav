@@ -1,0 +1,42 @@
+
+<launch>
+
+ <master auto="start"/> 
+
+    <!--param name="robot_description" command="$(find xacro)/xacro '$(find tracer_description)urdf/tracer_v1.xacro'" /-->
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+    </node>
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"></node>	
+ <!-- Run the map server --> 
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find turtlbot3_nav)/map/map.yaml">
+ </node>
+ 
+ <!--- Run AMCL -->    
+ <node pkg="amcl" type="amcl" name="amcl" output="screen">
+       <rosparam command="load"	file="$(find turtlebo3_nav)/param/amcl_params_tf.yaml"/>
+ </node>
+
+ <!-- launch the waypoints nav -->
+        <include file="$(find fulanghua_waypoints_nav)/launch/nav.launch"></include>
+
+ <!--- Run Waypoints -->
+        <include file="$(find orne_waypoints_editor)/launch/edit_waypoints_viz.launch"></include>
+ 
+ <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+   <param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS" />
+   <rosparam file="$(find turtlebo3_nav)/param/costmap_common_params.yaml" command="load" ns="global_costmap" /> 
+   <rosparam file="$(find turtlebot3_nav)/param/costmap_common_params.yaml" command="load" ns="local_costmap" /> 
+   <rosparam file="$(find turtlebo3_nav)/param/local_costmap_params.yaml" command="load" />
+   <rosparam file="$(find turtlebo3_nav)/param/global_costmap_params.yaml" command="load" /> 
+ 
+  <rosparam file="$(find turtlebo3_nav)/param/base_local_planner_params.yaml" command="load" />      
+
+ </node> 
+ <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 map odom"/>
+ <node pkg="tf2_ros" type="static_transform_publisher" name="odom_to_base_link" args="0 0 0.2 0 0 0  odom base_link"/>
+ <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_laser" args="0 0 0 0 0 0  base_link laser"/>
+ <node pkg="tf2_ros" type="static_transform_publisher" name="base_link2camera_link" args="0 0 0 0 0 0 base_link camera_link"/>
+
+
+</launch>
