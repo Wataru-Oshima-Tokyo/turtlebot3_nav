@@ -38,5 +38,8 @@
  <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_laser" args="0 0 0 0 0 0  base_link laser"/>
  <node pkg="tf2_ros" type="static_transform_publisher" name="base_link2camera_link" args="0 0 0 0 0 0 base_link camera_link"/>
 
-
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find turtlebot3_slam)/rviz/turtlebot3_$(arg slam_methods).rviz"/>
+  </group>
 </launch>
