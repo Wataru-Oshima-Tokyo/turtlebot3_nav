@@ -4,7 +4,7 @@
    <!-- launch the realsense-->
         <include file="$(find realsense2_camera)/launch/rs_camera.launch"></include>
    <!-- launch the image to pc -->
-        <include file="$(find image_publisher)/launch/depthimgTopc.launch"></include>
+        <include file="$(find pointcloud_to_laser)/launch/depthimgTopc.launch"></include>
       <!-- launch the image to pc -->
         <include file="$(find pointcloud_to_laser)/launch/pointcloud_to_laser_tracer.launch"></include>
 </launch>
