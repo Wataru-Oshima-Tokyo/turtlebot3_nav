@@ -31,7 +31,6 @@
     <arg name="move_forward_only" value="$(arg move_forward_only)"/>
   </include>     
 
- </node> 
  <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 map odom"/>
  <node pkg="tf2_ros" type="static_transform_publisher" name="odom_to_base_link" args="0 0 0.2 0 0 0  odom base_link"/>
  <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_laser" args="0 0 0 0 0 0  base_link laser"/>
