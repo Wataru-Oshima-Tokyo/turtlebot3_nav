@@ -1,0 +1,45 @@
+
+<launch>
+
+ <master auto="start"/> 
+ 
+  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="open_rviz" default="true"/>
+  <arg name="move_forward_only" default="false"/>
+
+
+  <!-- Turtlebot3 -->
+  <include file="$(find turtlebot3_bringup)/launch/turtlebot3_remote.launch">
+    <arg name="model" value="$(arg model)" />
+  </include>
+
+ <!-- Run the map server --> 
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find turtlebot3_nav)/map/map.yaml">
+ </node>
+ 
+
+ <!-- launch the waypoints nav -->
+        <include file="$(find fulanghua_waypoints_nav)/launch/nav.launch"></include>
+
+ <!--- Run Waypoints -->
+        <include file="$(find orne_waypoints_editor)/launch/edit_waypoints_viz.launch"></include>
+ 
+  <!-- AMCL -->
+  <include file="$(find turtlebot3_navigation)/launch/amcl.launch"/>
+
+  <!-- move_base -->
+  <include file="$(find turtlebot3_navigation)/launch/move_base.launch">
+    <arg name="model" value="$(arg model)" />
+    <arg name="move_forward_only" value="$(arg move_forward_only)"/>
+  </include> 
+
+ <!--node pkg="tf2_ros" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 map odom"/>
+ <node pkg="tf2_ros" type="static_transform_publisher" name="odom_to_base_link" args="0 0 0.2 0 0 0  odom base_footprint"/-->
+ <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_laser" args="0 0 0 0 0 0  base_footprint laser"/>
+ <node pkg="tf2_ros" type="static_transform_publisher" name="base_link2camera_link" args="0 0 0 0 0 0 base_footprint camera_link"/>
+
+  <!--group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find turtlebot3_nav)/rviz/turtlebot3_nav.rviz"/>
+  </group-->
+</launch>
