@@ -1,6 +1,12 @@
 <launch>
+   
+
+   <arg name="multi_robot_name" default=""/>
    <!-- launch the /cmd_vel, /odom,/tf -->
-	<include file="$(find turtlebot3_bringup)/launch/turtlebot3_robot.launch"></include>
+	<!--include file="$(find turtlebot3_bringup)/launch/turtlebot3_robot.launch"></include-->
+     <include file="$(find turtlebot3_bringup)/launch/turtlebot3_core.launch">
+         <arg name="multi_robot_name" value="$(arg multi_robot_name)"/>
+     </include>  
    <!-- launch the realsense-->
         <include file="$(find realsense2_camera)/launch/rs_camera.launch">
           <arg name="enable_pointcloud"         default="true"/>
@@ -11,6 +17,8 @@
 	  <arg name="enable_sync"               default="true"/>
 	  <arg name="align_depth"               default="true"/>
 	</include>
+   <!-- launch the rplidar -->
+       <include file="$(find rplidar_ros)/launch/rplidar.launch"></include>
    <!-- launch the image to pc -->
         <!--include file="$(find pointcloud_to_laser)/launch/depthimgTopc.launch"></include-->
       <!-- launch the image to pc -->
